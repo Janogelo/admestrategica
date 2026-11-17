@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adm. Estratégica — Resumo + Questões V ou F</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ec; --card:#fffdf8; --ink:#1d1b16; --muted:#6b665b; --line:#e4ddcf;
+  --acc:#1f5f4a; --acc2:#e8f1ec; --red:#b3362b; --red2:#fbe9e6; --green:#1d7a46; --green2:#e3f4ea;
+  --yel:#fff4cf; --yelb:#e8c95c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .5em}
+header{background:var(--acc);color:#fff;padding:22px 18px 0}
+header .wrap{max-width:880px;margin:0 auto}
+header h1{font-size:1.6rem}
+header p{margin:.2em 0 1em;opacity:.85;font-size:.95rem}
+.tabs{display:flex;gap:6px}
+.tab{background:transparent;border:0;color:#fff;opacity:.7;font:600 1rem Inter;padding:10px 16px;border-radius:10px 10px 0 0;cursor:pointer}
+.tab.on{background:var(--bg);color:var(--acc);opacity:1}
+main{max-width:880px;margin:0 auto;padding:20px 16px 80px}
+.view{display:none}.view.on{display:block}
+
+/* resumo */
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.toc a{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;color:var(--acc);text-decoration:none;font-weight:600}
+section.aula{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 20px 10px;margin-bottom:18px}
+section.aula h2{font-size:1.35rem;color:var(--acc)}
+section.aula h3{font-size:1.05rem;margin-top:1.2em}
+.tag{display:inline-block;font:700 .72rem Inter;letter-spacing:.04em;text-transform:uppercase;background:var(--acc2);color:var(--acc);padding:3px 8px;border-radius:6px;margin-bottom:8px}
+.macete{background:var(--yel);border-left:4px solid var(--yelb);padding:10px 14px;border-radius:8px;margin:12px 0;font-size:.95rem}
+.macete b:first-child{display:block;margin-bottom:2px}
+.pega{background:var(--red2);border-left:4px solid var(--red);padding:10px 14px;border-radius:8px;margin:12px 0;font-size:.95rem}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:.92rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f1ece1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:10px 0 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.9rem}
+.grid2>div{padding:10px 12px;border:1px solid var(--line)}
+.grid2 .h{background:#f1ece1;font-weight:700}
+ul{padding-left:1.2em}li{margin:.25em 0}
+.scroll{overflow-x:auto}
+
+/* quiz */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:600 .85rem Inter;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.btn{border:0;border-radius:10px;padding:10px 16px;font:600 .95rem Inter;cursor:pointer;background:var(--acc);color:#fff}
+.btn.ghost{background:var(--card);color:var(--acc);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.bar .btn.ghost{padding:7px 12px;font-size:.85rem}
+.stats{display:flex;gap:14px;font-size:.9rem;color:var(--muted);margin:6px 0 12px;flex-wrap:wrap}
+.stats b{color:var(--ink)}
+.prog{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:16px}
+.prog i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.q .meta{font-size:.8rem;color:var(--muted);font-weight:600;margin-bottom:8px}
+.q .stmt{font-size:1.12rem;font-weight:500;margin-bottom:18px}
+.vf{display:flex;gap:10px}
+.vf button{flex:1;padding:14px;border-radius:12px;border:2px solid var(--line);background:#fff;font:700 1.05rem Inter;cursor:pointer}
+.vf button.v:hover,.vf button.v.sel{border-color:var(--green);background:var(--green2);color:var(--green)}
+.vf button.f:hover,.vf button.f.sel{border-color:var(--red);background:var(--red2);color:var(--red)}
+.vf button:disabled{cursor:default}
+textarea{width:100%;min-height:90px;margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;resize:vertical;background:#fff}
+.lbl{font-weight:600;font-size:.92rem;margin-top:14px;display:block}
+.res{margin-top:16px;padding:14px 16px;border-radius:12px;font-size:.98rem}
+.res.ok{background:var(--green2);border:1px solid #b9e0c8}
+.res.bad{background:var(--red2);border:1px solid #f0c4bd}
+.res h4{margin:0 0 6px;font:700 1rem Inter}
+.res .you{background:#ffffffaa;border-radius:8px;padding:8px 10px;margin:8px 0;font-size:.92rem}
+.self{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.end{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
+.end .big{font:800 3rem Fraunces}
+.small{font-size:.85rem;color:var(--muted)}
+@media (max-width:560px){header h1{font-size:1.3rem}.q{padding:16px}.q .stmt{font-size:1.02rem}section.aula{padding:16px 14px 6px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Administração Estratégica: revisão pra prova</h1>
+  <p>Prof. Diego Paes · UFRN · Aulas 1 a 6, Aula 8 e o artigo sobre estratégias deliberadas e emergentes</p>
+  <div class="tabs">
+    <button class="tab on" data-v="resumo">📘 Resumo</button>
+    <button class="tab" data-v="quiz">✅ Questões V ou F</button>
+  </div>
+</div></header>
+
+<main>
+<!-- ===================== RESUMO ===================== -->
+<div class="view on" id="v-resumo">
+  <div class="toc">
+    <a href="#a2">1. O que é estratégia</a>
+    <a href="#a3">2. Vantagem competitiva, SWOT, missão e visão</a>
+    <a href="#a4">3. Ambiente externo e as 5 forças</a>
+    <a href="#a5">4. RBV e VRIO</a>
+    <a href="#a6">5. Ferramentas (Porter, BCG, Ansoff, BSC, KPI)</a>
+    <a href="#a8">6. Deliberada × Emergente</a>
+    <a href="#art">7. Artigo</a>
+    <a href="#pega">⚠️ Pegadinhas</a>
+  </div>
+
+  <section class="aula" id="a2">
+    <span class="tag">Aula 2</span>
+    <h2>O que é estratégia (origem, os 5 Ps, Chaffee)</h2>
+    <p><b>Origem:</b> a ideia de estratégia vem da <b>guerra</b>. A palavra vem do grego <i>stratēgia</i>, que quer dizer "a arte do general". No mundo dos negócios ela começa de leve no <b>século XIX</b>, mas só vira assunto central na <b>segunda metade do século XX</b>.</p>
+    <ul>
+      <li><b>Sun Tzu:</b> o general que vence faz muitos cálculos antes da batalha. Quem conhece a si mesmo <i>e</i> o inimigo não precisa temer 100 batalhas. Quem só conhece a si mesmo ganha uma e perde outra. Quem não conhece nenhum dos dois perde todas.</li>
+      <li><b>Clausewitz:</b> ninguém (em sã consciência) começa uma guerra sem saber o que quer conquistar e como vai conduzir.</li>
+    </ul>
+    <h3>Níveis: guerra × empresa</h3>
+    <table><tr><th>Na guerra</th><th>Na empresa</th></tr>
+      <tr><td>Político</td><td>Estratégico</td></tr>
+      <tr><td>Estratégico</td><td>Tático</td></tr>
+      <tr><td>Tático</td><td>Operacional</td></tr></table>
+    <p><b>Ideia central:</b> a estratégia <b>mobiliza recursos</b> (que quase sempre são <b>limitados</b>) para atingir <b>objetivos</b>. O exemplo da Suíça mostra isso: você não tem tudo o que queria, mas usa o que tem de forma estratégica.</p>
+    <p><b>Definição de Wright et al. (1992):</b> estratégia são os planos que a <b>alta gerência</b> desenvolve para chegar a resultados coerentes com a missão e os objetivos da organização.</p>
+
+    <h3>Os 5 Ps da estratégia (Mintzberg et al., 2010)</h3>
+    <p>Mintzberg não dá uma definição só. Ele mostra <b>cinco jeitos de enxergar</b> a estratégia:</p>
+    <div class="scroll"><table>
+      <tr><th>P</th><th>O que é</th><th>Exemplo da aula</th></tr>
+      <tr><td><b>Plano</b></td><td>Um curso de ação, um caminho pensado <i>antes</i>. É a visão mais comum.</td><td>—</td></tr>
+      <tr><td><b>Padrão</b></td><td>Um comportamento que se repete ao longo do tempo, inclusive nas respostas aos imprevistos. Daqui vêm as ideias de deliberada e emergente.</td><td>A "grande teoria" da Apple</td></tr>
+      <tr><td><b>Posição</b></td><td>Olha <b>para fora</b>: qual produto eu coloco em qual mercado, no ponto onde o produto encontra o cliente.</td><td>Kopenhagen</td></tr>
+      <tr><td><b>Perspectiva</b></td><td>Olha <b>para dentro</b>: a grande visão da empresa sobre as próprias capacidades e aonde quer chegar. É a "teoria" da organização.</td><td>Vale e o seu potencial logístico</td></tr>
+      <tr><td><b>Ploy (truque)</b></td><td>Uma manobra <b>específica e de curto prazo</b> para deixar o rival no chão.</td><td>A Coca-Cola sacrificou um produto só para atrapalhar a Pepsi</td></tr>
+    </table></div>
+    <div class="macete"><b>Macete:</b> <b>Posição = fora</b> (mercado e cliente). <b>Perspectiva = dentro</b> (a "cabeça" da empresa). <b>Ploy = truque rápido.</b></div>
+
+    <h3>Concordâncias gerais sobre estratégia (Chaffee, 1985)</h3>
+    <ul>
+      <li>Diz respeito tanto à <b>organização</b> quanto ao <b>ambiente</b>: é usada para lidar com as mudanças do ambiente.</li>
+      <li>A essência é <b>complexa</b>: ela é <b>não estruturada, não programada, não rotineira e não repetitiva</b>.</li>
+      <li>Envolve <b>conteúdo</b> (as ações decididas) e <b>processo</b> (como as ações são decididas e implementadas).</li>
+      <li><b>Não é puramente deliberada:</b> as estratégias pretendida, emergente e realizada podem ser diferentes entre si. Exemplo: o Slack virou um negócio de R$ 140 bi "por acidente".</li>
+      <li>Existe em <b>níveis diferentes</b>: a estratégia corporativa (a empresa como um todo) e as estratégias de cada área de negócio ou produto. Exemplo: General Mills e a Häagen-Dazs.</li>
+      <li>Envolve vários <b>processos de pensamento</b>, tanto conceituais quanto analíticos.</li>
+    </ul>
+  </section>
+
+  <section class="aula" id="a3">
+    <span class="tag">Aula 3</span>
+    <h2>Vantagem competitiva, SWOT, missão, visão e valores</h2>
+    <p><b>Estratégia (Hitt et al.):</b> um conjunto <b>integrado e coordenado de compromissos e ações</b> para explorar as <b>competências essenciais</b> e conseguir <b>vantagem competitiva</b>.</p>
+    <p><b>Competitividade estratégica:</b> é alcançada quando a empresa formula e implanta com sucesso uma estratégia de <b>criação de valor</b>.</p>
+    <div class="macete"><b>Fórmula que cai:</b> <b>Valor = Benefícios percebidos − Custo percebido</b>. Criar valor é resolver um problema real ou atender a um desejo de um jeito melhor, mais rápido, mais barato ou mais significativo que a concorrência.</div>
+    <h3>Vantagem competitiva</h3>
+    <ul>
+      <li>Acontece quando a empresa implementa uma estratégia de criação de valor que os concorrentes <b>não conseguem imitar</b> ou que sairia <b>cara demais</b> imitar.</li>
+      <li>Você só tem <b>certeza</b> de que ela é sustentável quando os concorrentes <b>param de tentar copiar ou fracassam</b>.</li>
+      <li>Quanto ela dura depende da <b>velocidade com que os concorrentes conseguem copiar</b>. Exemplo: BlackBerry, depois Apple, e o Google correndo atrás.</li>
+      <li>Com vantagem competitiva a empresa tem <b>retornos acima da média</b>, ou seja, acima do que daria outro investimento de risco parecido. Sem ela, no máximo <b>retornos médios</b>.</li>
+    </ul>
+    <p><b>Processo de administração estratégica:</b> é o conjunto completo de compromissos, decisões e ações para chegar à vantagem competitiva e a retornos acima da média. <b>O 1º passo é analisar o ambiente</b>, tanto o externo quanto o interno.</p>
+    <h3>Ambiente interno: 5 aspectos</h3>
+    <ul>
+      <li><b>Organizacionais:</b> estrutura, o que torna a empresa especial, objetivos, maiores sucessos.</li>
+      <li><b>Pessoal:</b> relação entre patrões e empregados, treinamento, rotatividade, motivação, talentos.</li>
+      <li><b>Marketing:</b> os 4Ps e se os resultados estão coerentes.</li>
+      <li><b>Produção:</b> se está atualizada e eficiente, o que terceirizar e o que internalizar.</li>
+      <li><b>Financeiros:</b> como estão as finanças, se há dinheiro para investir, se há prejuízos recorrentes.</li>
+    </ul>
+    <h3>Ambiente externo</h3>
+    <p><b>Macroambiente:</b> forças político-legais, econômicas, tecnológicas e socioculturais. <b>Microambiente:</b> concorrentes, produtos substitutos, fornecedores, órgãos reguladores e consumidores.</p>
+    <h3>SWOT</h3>
+    <div class="grid2">
+      <div class="h">Ajudam</div><div class="h">Atrapalham</div>
+      <div><b>S – Forças</b> (interno)<br>Características reais e positivas da organização</div>
+      <div><b>W – Fraquezas</b> (interno)<br>Características reais e negativas da organização</div>
+      <div><b>O – Oportunidades</b> (externo)<br>Possibilidades positivas do cenário, que <i>podem não acontecer</i></div>
+      <div><b>T – Ameaças</b> (externo)<br>Dificuldades que a empresa pode enfrentar</div>
+    </div>
+    <div class="macete"><b>Macete:</b> <b>S e W são de dentro</b> (atributos da organização). <b>O e T são de fora</b> (atributos do ambiente).</div>
+    <h3>Missão, visão e valores</h3>
+    <p>Os três <b>nascem da análise dos ambientes externo e interno</b>. Primeiro a empresa analisa, depois define.</p>
+    <ul>
+      <li><b>Missão:</b> o motivo central do planejamento, o papel que a empresa quer exercer no mundo. Deve caber em <b>uma frase concisa</b>, ser inspiradora e relevante para todos os stakeholders. <b>Pode mudar</b> conforme as condições do ambiente. Exemplo da Rede Mais: "Surpreender o cliente com a melhor experiência em um supermercado de vizinhança."</li>
+      <li><b>Visão:</b> o <b>futuro ideal</b> pretendido, voltado para o <b>longo prazo</b> e para a organização como um todo. É curta, fácil de lembrar, e impulsiona e desafia as pessoas. Exemplo da Solar BR: "Ser referência mundial em serviços, produção e distribuição de bebidas."</li>
+      <li><b>Valores:</b> as diretrizes que traduzem <b>aquilo em que a empresa acredita</b>. Exemplo: os valores da Vale ("a vida em primeiro lugar" etc.).</li>
+    </ul>
+  </section>
+
+  <section class="aula" id="a4">
+    <span class="tag">Aula 4</span>
+    <h2>Ambiente externo: ambiente geral, PESTAL e as 5 forças de Porter</h2>
+    <p><b>Ambiente externo</b> é tudo o que forma o meio onde a empresa opera: economia, cultura, natureza, leis etc. <b>Nenhuma organização controla tudo</b> (lembra de "Fortuna e Virtù"). A empresa controla a própria estratégia, as habilidades e o posicionamento, mas muita coisa foge do controle dela. A internet, por exemplo, "enterrou" vários setores, e a IA está chegando.</p>
+    <h3>Ambiente geral</h3>
+    <p>São as dimensões mais amplas da sociedade. A característica que define o ambiente geral é que a empresa <b>(normalmente) não consegue controlá-lo diretamente</b>. O que dá para fazer é reconhecer as tendências, estimar o efeito delas e pensar na melhor resposta (oportunidades e ameaças).</p>
+    <h3>Os 4 passos da análise do ambiente geral, NESTA ORDEM</h3>
+    <ol>
+      <li><b>Escaneamento:</b> identificar os <b>primeiros sinais</b> de mudanças e tendências.</li>
+      <li><b>Monitoramento:</b> detectar o significado observando as mudanças de forma <b>constante</b>.</li>
+      <li><b>Previsão:</b> fazer <b>projeções</b> com base no que foi monitorado.</li>
+      <li><b>Avaliação:</b> determinar o <b>momento e a importância</b> das mudanças para a estratégia.</li>
+    </ol>
+    <div class="macete"><b>Macete da ordem:</b> "<b>E</b>u <b>M</b>e <b>P</b>repa<b>ro</b> <b>A</b>ntes": Escaneamento → Monitoramento → Previsão → Avaliação.</div>
+    <h3>Segmentos do ambiente geral (Hitt)</h3>
+    <div class="scroll"><table>
+      <tr><th>Segmento</th><th>Exemplos</th></tr>
+      <tr><td>Demográfico</td><td>Tamanho da população, estrutura etária, distribuição geográfica, miscigenação, distribuição de renda</td></tr>
+      <tr><td>Econômico</td><td>Inflação, juros, PIB, déficit ou superávit comercial e orçamentário, taxa de poupança</td></tr>
+      <tr><td>Político-jurídico</td><td>Leis antitruste e tributárias, (des)regulamentação, leis de treinamento de mão de obra, políticas educacionais</td></tr>
+      <tr><td>Sociocultural</td><td>Mulheres no mercado de trabalho, diversidade, qualidade de vida no trabalho, mudanças de preferência</td></tr>
+      <tr><td>Tecnológico</td><td>Inovação de produtos, P&amp;D, novas tecnologias de comunicação</td></tr>
+      <tr><td>Global</td><td>Acontecimentos políticos relevantes, mercados globais, industrialização de países emergentes</td></tr>
+      <tr><td>Natural / sustentável</td><td>Energia, fontes renováveis, água, impactos ambientais, desastres, produtos ecológicos</td></tr>
+    </table></div>
+    <p><b>PESTAL:</b> <b>P</b>olítico, <b>E</b>conômico, <b>S</b>ocial, <b>T</b>ecnológico, <b>A</b>mbiental e <b>L</b>egal (em inglês, PESTEL). É um jeito básico de organizar a análise do ambiente geral.</p>
+    <h3>Ambiente setorial</h3>
+    <p><b>Setor</b> é um grupo de empresas que fabricam <b>produtos substitutos próximos</b>. As ações de uma afetam diretamente as rivais. Exemplo: os business clusters, aqueles lugares com vários concorrentes juntos.</p>
+    <h3>As 5 forças de Porter</h3>
+    <div class="scroll"><table>
+      <tr><th>Força</th><th>Quando ela é FORTE</th></tr>
+      <tr><td><b>Rivalidade entre concorrentes</b> (no centro)</td><td>Muitas empresas · crescimento <b>lento</b> · grandes interesses estratégicos · <b>baixa diferenciação</b> ou baixo custo de mudança · <b>altas barreiras à saída</b>. Exemplo: setor aéreo.</td></tr>
+      <tr><td><b>Ameaça de novos entrantes</b></td><td>Depende de 2 fatores: as <b>barreiras à entrada</b> e a <b>retaliação esperada</b>. Espera-se retaliação forte quando as empresas que já estão lá têm interesse no setor, têm muitos recursos e o setor cresce devagar. Um novo entrante aumenta a oferta, derruba os preços e reduz a receita de quem já está no setor.</td></tr>
+      <tr><td><b>Poder dos fornecedores</b></td><td>Há <b>poucos</b> fornecedores (ou um monopólio) · não existem substitutos satisfatórios · o volume que a empresa compra é <b>inexpressivo</b> · o recurso fornecido é estratégico. Exemplo: Disney e Star Wars.</td></tr>
+      <tr><td><b>Poder dos compradores</b></td><td>Um único comprador responde por um <b>grande volume</b> de vendas · trocar de produto custa pouco · o produto é uma <b>commodity</b>. Exemplo: Nike, que dita as regras da própria cadeia de suprimento.</td></tr>
+      <tr><td><b>Ameaça de substitutos</b></td><td>Produtos de <b>fora do setor</b> que cumprem a mesma função. São ameaça real quando a troca custa pouco, o preço é menor ou a qualidade é igual ou maior. <b>Diferenciar</b> o produto reduz essa ameaça. Exemplo: o CrossFit.</td></tr>
+    </table></div>
+    <div class="pega"><b>Pegadinha:</b> as 5 forças NÃO incluem "governo". São: rivalidade, entrantes, substitutos, fornecedores e <b>compradores</b>.</div>
+  </section>
+
+  <section class="aula" id="a5">
+    <span class="tag">Aula 5</span>
+    <h2>Ambiente interno I: Visão Baseada em Recursos (RBV) e VRIO</h2>
+    <p>A estratégia da empresa também pode <b>afetar o ambiente</b>. É o exemplo da Tesla, que vale muito mais que a Toyota no mercado.</p>
+    <p><b>RBV:</b> as competências, capacidades (<i>capabilities</i>) e habilidades são a base do conhecimento da empresa e a <b>fonte mais importante da vantagem competitiva</b>.</p>
+    <ul>
+      <li><b>Barney (1991):</b> vantagem competitiva acontece quando a empresa implementa uma estratégia de criação de valor que <b>não está sendo usada ao mesmo tempo por nenhum concorrente atual ou potencial</b>.</li>
+      <li><b>Assimetria de recursos:</b> as empresas têm recursos <b>diferentes</b> (mão de obra, tecnologia, marca, patentes) e essas diferenças são <b>relativamente estáveis</b> ao longo do tempo. É assim que algumas mantêm a vantagem por muito tempo. Exemplo: Pipoca Bokus.</li>
+      <li>A vantagem vem de ganhos de <b>eficiência</b> (fazer mais com menos) ou de <b>eficácia</b> (atingir um objetivo novo). Qualquer vantagem tende a ser copiada, mas algumas são tão valiosas que os rivais desistem ou fracassam.</li>
+      <li><b>Recursos (Barney):</b> todos os bens, capabilities, processos, atributos, informações e conhecimentos <b>controlados pela empresa</b> que permitem criar e implementar estratégias mais eficientes e eficazes.</li>
+      <li><b>Capabilities:</b> um tipo especial de recurso. São <b>intrínsecas, não transferíveis e específicas da empresa</b>, e servem para <b>aumentar a produtividade dos outros recursos</b>. Exemplo: Steve Jobs e a Apple.</li>
+    </ul>
+    <h3>Tangíveis × intangíveis (como está no slide)</h3>
+    <ul>
+      <li><b>Tangíveis:</b> bens físicos, recursos financeiros e humanos, imóveis, insumos, maquinário, planta, inventário, marcas, patentes, marcas registradas e dinheiro.</li>
+      <li><b>Intangíveis:</b> fazem parte da rotina e das práticas da empresa: <b>cultura, reputação, conhecimento, capabilities, relacionamento</b> com clientes, fornecedores e stakeholders.</li>
+    </ul>
+    <div class="pega"><b>Atenção:</b> no slide do professor, <b>marcas e patentes estão listadas como tangíveis</b>. Muitos livros classificam esses itens como intangíveis. Se cair na prova, siga o slide.</div>
+    <p><b>Nem todo recurso é estratégico.</b> O primeiro passo é identificar os recursos-chave, e para isso dá para usar a SWOT.</p>
+    <h3>VRIN → VRIO (os critérios do recurso-chave)</h3>
+    <div class="scroll"><table>
+      <tr><th>Letra</th><th>Pergunta</th><th>Exemplo da aula</th></tr>
+      <tr><td><b>V</b>alioso</td><td>Quanto esse recurso agrega de verdade ao negócio?</td><td>Algoritmo da Netflix</td></tr>
+      <tr><td><b>R</b>aro</td><td>É difícil de conseguir? Os concorrentes não acessam fácil?</td><td>Carisma e conexão com um público específico</td></tr>
+      <tr><td><b>I</b>mperfeitamente imitável</td><td>Se alguém tentar copiar, não sai igual?</td><td>Cultura da Toyota</td></tr>
+      <tr><td><b>N</b> – Insubstituível (VRIN)</td><td>Dá para trocar por outra coisa que tenha o mesmo efeito?</td><td>Localização do Copacabana Palace</td></tr>
+      <tr><td><b>O</b>rganização (VRIO)</td><td>A empresa está apta a explorar o recurso (estrutura, canais, dinheiro)?</td><td>Turismo no RN: 32 mil turistas estrangeiros em 2025, contra 3,5 milhões em Ibiza</td></tr>
+    </table></div>
+    <div class="macete"><b>Importante:</b> Barney trocou o <b>N</b> pelo <b>O</b>. O "insubstituível" <b>continua relevante</b>, mas foi <b>absorvido pelo "imperfeitamente imitável"</b>. Um recurso ótimo numa empresa que não sabe explorá-lo fica só como <b>vantagem potencial</b>.</div>
+    <p><b>Depois de identificar os recursos:</b> proteger (manter a exclusividade), desenvolver (ver que outros frutos podem dar) e cuidar para que continuem estratégicos. Quem não avalia a inovação vira "o Firefox".</p>
+  </section>
+
+  <section class="aula" id="a6">
+    <span class="tag">Aula 6</span>
+    <h2>Ferramentas: estratégias genéricas, BCG, Ansoff, BSC e KPIs</h2>
+    <p>As ferramentas ajudam a organizar a análise de <b>dentro</b> (empresa) e de <b>fora</b> (mercado). <b>Para fora:</b> PESTAL, 5 forças, estratégias genéricas, BCG e Ansoff. <b>Para dentro:</b> Balanced Scorecard.</p>
+    <h3>Estratégias genéricas de Porter</h3>
+    <p>Dois eixos: a <b>vantagem estratégica</b> (unicidade percebida pelo cliente × baixo custo) e o <b>alvo estratégico</b> (toda a indústria × um único segmento).</p>
+    <div class="grid2">
+      <div class="h">Unicidade</div><div class="h">Baixo custo</div>
+      <div><b>Diferenciação</b> (toda a indústria)<br>Identidade forte: qualidade, serviço, prestígio, estilo ou praticidade. Não pense só na Ferrari: a aula cita também a BIC.</div>
+      <div><b>Liderança em custo</b> (toda a indústria)<br>Vence pelo <b>preço</b>, com um produto igual ou indistinto da concorrência. É típica de commodities e da aviação civil. Exemplo: carros asiáticos.</div>
+      <div><b>Foco em unicidade</b> (um segmento)<br>Serviço especializado para um público bem específico, como hobbies ou ultraluxo.</div>
+      <div><b>Foco em baixo custo</b> (um segmento)<br>Um nicho específico de baixo orçamento.</div>
+    </div>
+    <p><b>Foco</b> (ou nicho): escolher <b>um único segmento</b> e concentrar as forças nele, em vez de brigar com todo mundo. Exemplo: cinemas alternativos.</p>
+
+    <h3>Matriz BCG (Boston Consulting Group)</h3>
+    <p>Serve para analisar o <b>portfólio de produtos</b> e decidir onde colocar recursos. Eixos: <b>crescimento do mercado</b> (vertical) × <b>participação relativa de mercado</b> (horizontal).</p>
+    <div class="grid2">
+      <div><b>⭐ Estrela</b><br>Participação alta e crescimento <b>alto</b>. A concorrência é instável, é preciso <b>investir muito</b> e as margens são menores.</div>
+      <div><b>❓ Interrogação</b><br>Participação baixa e crescimento alto. Pode virar estrela (e depois vaca leiteira)... ou não.</div>
+      <div><b>🐄 Vaca leiteira</b><br>Participação alta e crescimento <b>baixo</b> (mercado maduro). A concorrência é estável, <b>investe-se pouco</b> e as <b>margens são altas</b>.</div>
+      <div><b>🍍 Abacaxi</b><br>Participação baixa e crescimento baixo. Dá pouco lucro e consome recursos e atenção. Idealmente, <b>sai do portfólio</b>.</div>
+    </div>
+    <div class="macete"><b>Ciclo:</b> quando o mercado amadurece, o crescimento cai e as <b>estrelas viram vacas leiteiras</b>. É nesse sentido, e não no contrário.</div>
+
+    <h3>Matriz de Ansoff (1965): estratégias de CRESCIMENTO</h3>
+    <div class="scroll"><table>
+      <tr><th></th><th>Produto tradicional</th><th>Produto novo</th></tr>
+      <tr><th>Mercado tradicional</th><td><b>Penetração de mercado</b>: crescer em cima dos rivais num setor que já existe</td><td><b>Desenvolvimento de produto</b>: levar uma novidade para o mercado atual</td></tr>
+      <tr><th>Mercado novo</th><td><b>Desenvolvimento de mercado</b>: achar um novo lugar para o mesmo produto</td><td><b>Diversificação</b>: produto novo em mercado novo</td></tr>
+    </table></div>
+    <div class="macete"><b>Macete:</b> o nome mostra <b>o que é novo</b>. "Desenvolvimento de <b>produto</b>" = o produto é novo. "Desenvolvimento de <b>mercado</b>" = o mercado é novo. Os dois novos = diversificação.</div>
+
+    <h3>Balanced Scorecard (BSC)</h3>
+    <p>Criado por <b>Kaplan e Norton</b> no <b>início dos anos 1990</b>. Serve para <b>tirar a estratégia do papel</b>: transforma a estratégia em <b>objetivos, indicadores (KPIs), metas (alvos) e iniciativas</b>, distribuídos em 4 perspectivas. Ele <b>complementa</b> as métricas financeiras com outras medidas.</p>
+    <ul>
+      <li><b>Financeira:</b> desempenho financeiro e retorno sobre o investimento.</li>
+      <li><b>Clientes:</b> satisfação, retenção e valor gerado para o cliente.</li>
+      <li><b>Processos internos:</b> eficiência e eficácia dos processos operacionais principais.</li>
+      <li><b>Aprendizado e crescimento:</b> desenvolvimento dos funcionários, cultura e melhoria contínua.</li>
+    </ul>
+    <div class="macete"><b>Lógica do BSC (de baixo para cima):</b> a empresa <b>aprende</b> → melhora os <b>processos</b> → atende melhor os <b>clientes</b> → melhora o <b>financeiro</b>.</div>
+    <h3>KPIs e o critério SMART</h3>
+    <p>KPI (<i>Key Performance Indicator</i>) é uma métrica <b>quantificável</b> que mostra se você está chegando perto do objetivo. "O que não se mede, não se gerencia" (Drucker). Os KPIs servem para identificar problemas rápido, alinhar a equipe, promover melhoria contínua e comparar resultados.</p>
+    <p><b>Um bom KPI é SMART:</b> <b>S</b>pecífico, <b>M</b>ensurável, <b>A</b>tingível, <b>R</b>elevante e <b>T</b>emporal (tem prazo).<br>
+    Exemplo bom: "Aumentar a taxa de conversão de 8% para 12% até dezembro." Exemplo ruim: "aumentar as vendas", porque não tem número nem prazo.</p>
+  </section>
+
+  <section class="aula" id="a8">
+    <span class="tag">Aula 8 · a mais recente, tende a cair bastante</span>
+    <h2>Estratégia deliberada × emergente (Mintzberg)</h2>
+    <p><b>Por que nenhum plano sai perfeito?</b></p>
+    <ol>
+      <li><b>Racionalidade limitada:</b> você (1) não conhece todas as alternativas, (2) não conhece todas as consequências e (3) mesmo que conhecesse, não saberia avaliar qual é a melhor. Por isso não dá para <b>maximizar</b> resultados.</li>
+      <li><b>O ambiente não depende de você.</b> "Todo mundo tem um plano até tomar um soco na cara" (Mike Tyson).</li>
+    </ol>
+    <p><b>Mintzberg (1985):</b> as estratégias existem num <b>contínuo</b> entre deliberadas e emergentes.</p>
+    <div class="scroll"><table>
+      <tr><th></th><th>Deliberada</th><th>Emergente</th></tr>
+      <tr><td>O que é</td><td>Proposital. Tudo o que foi planejado tem intenção e foi executado sem alterações.</td><td>Não proposital. É um padrão de ações <b>consistentes ao longo do tempo</b> (senão seria só sorte).</td></tr>
+      <tr><td>Direção</td><td><b>Top-down</b>: a alta gerência concebe e os níveis tático e operacional executam.</td><td><b>Bottom-up</b>: surge como padrão do que funciona. <i>Não</i> quer dizer que o operacional formula a estratégia.</td></tr>
+      <tr><td>Questão central</td><td><b>Controle estratégico</b></td><td><b>Aprendizagem organizacional</b> (próximo das rotinas e das capacidades dinâmicas)</td></tr>
+      <tr><td>Na forma pura</td><td><b>Não existe</b> (exemplo: La Casa de Papel)</td><td><b>Também não existe</b> (toda empresa faz algum planejamento)</td></tr>
+    </table></div>
+    <p>Quanto mais cuidadosa e precisa for a estratégia desenhada, mais a <b>realizada</b> se parece com a <b>planejada</b>. Quanto mais aberto (ou pior) for o planejamento, mais a realizada terá surgido ao longo do caminho. Exemplos: GOL no Brasil e Honda nos EUA.</p>
+    <h3>Os 8 tipos de estratégia de Mintzberg (do mais deliberado ao mais emergente)</h3>
+    <div class="scroll"><table>
+      <tr><th>Tipo</th><th>De onde se origina</th><th>Grau</th></tr>
+      <tr><td><b>Planejada</b></td><td>Planos formais, intenções precisas da liderança central, controles formais, ambiente previsível</td><td>A <b>mais deliberada</b></td></tr>
+      <tr><td><b>Empreendedora</b></td><td>A <b>visão pessoal</b> (não explicitada) de um único líder, que controla tudo. Ocupa um nicho protegido.</td><td>Relativamente deliberada, mas pode emergir</td></tr>
+      <tr><td><b>Ideológica</b></td><td><b>Crenças compartilhadas</b>, uma visão coletiva e inspiradora. O controle é normativo (doutrinação e socialização). A empresa é proativa.</td><td>Bastante deliberada</td></tr>
+      <tr><td><b>Guarda-chuva</b></td><td><b>Restrições</b>: a liderança define limites e objetivos, e os outros atores agem dentro deles</td><td>Parcialmente deliberada, parcialmente emergente, <b>deliberadamente emergente</b></td></tr>
+      <tr><td><b>De processo</b></td><td>A liderança controla o <b>processo</b> (contratação, estrutura) e deixa o <b>conteúdo</b> com os outros</td><td>Parcialmente deliberada, parcialmente emergente, deliberadamente emergente</td></tr>
+      <tr><td><b>Desconectada</b></td><td><b>Enclaves</b>: atores com vínculo frouxo criam os próprios padrões, sem intenção central ou contra ela</td><td>Emergente no nível da organização</td></tr>
+      <tr><td><b>De consenso</b></td><td><b>Ajustamento mútuo</b>: os atores convergem para padrões, sem intenção central</td><td>Bastante emergente</td></tr>
+      <tr><td><b>Imposta</b></td><td>O <b>ambiente</b> determina, impondo diretamente ou limitando as escolhas</td><td>A <b>mais emergente</b> (mas pode ser internalizada e virar deliberada)</td></tr>
+    </table></div>
+    <div class="macete"><b>Frase-chave do final da aula:</b> 100% deliberada = <b>aprendizagem zero</b>. 100% emergente = <b>controle zero</b>. Emergente <b>não é necessariamente ruim</b> e deliberada <b>não é sempre boa</b>.</div>
+  </section>
+
+  <section class="aula" id="art">
+    <span class="tag">Texto · Borges Jr. &amp; Luce (RAE, 2000)</span>
+    <h2>Artigo "Estratégias emergentes ou deliberadas"</h2>
+    <ul>
+      <li><b>Objetivo:</b> apresentar os conceitos de estratégia emergente e deliberada dentro do marketing estratégico. O método é um <b>estudo de casos</b> com os vencedores do prêmio <b>Top de Marketing da ADVB/RS</b>: <b>14 empresas</b> participaram.</li>
+      <li><b>Deliberadas:</b> são a continuação dos antigos <b>orçamentos e planejamentos</b> formais e rígidos, feitos pela alta cúpula ou por consultorias. A empresa <b>antecipa</b> o ambiente e faz um plano prévio.</li>
+      <li><b>Emergentes:</b> "emergir" é vir à tona. É a estratégia que surge <b>em resposta a uma oportunidade do ambiente</b>, porque é difícil prever o futuro. Ela <b>corrige a rota</b>. É fruto mais da <b>cultura organizacional</b> e da <b>learning organization</b> do que do planejamento.</li>
+      <li><b>Metáfora:</b> o planejamento estratégico deve ser uma <b>estrada larga</b> (dá consistência), e <b>não um trilho</b> (que tira a flexibilidade no curto prazo).</li>
+    </ul>
+    <h3>Números do estudo (podem cair)</h3>
+    <ul>
+      <li>Todas as empresas fizeram algum tipo de <b>análise do ambiente</b>, às vezes bem subjetiva.</li>
+      <li><b>Objetivos:</b> 3 das 14 não tinham objetivos claros e 1 adaptou os objetivos no caminho. A maioria definiu objetivos claros.</li>
+      <li><b>Plano de ação:</b> 13 das 14 fizeram. A única que não fez também não tinha objetivo, e o produto fracassou.</li>
+      <li><b>Programa de controle formal:</b> só <b>1 de 14</b> tinha.</li>
+      <li><b>Ações adaptativas</b> (o coração das emergentes): <b>12 de 14</b> tomaram. As 2 que não tomaram bateram as metas de curto prazo, mas se complicaram no longo.</li>
+      <li><b>Resultados:</b> 13 de 14 atingiram os objetivos no curto prazo, mas <b>7 não sustentaram</b> a estratégia depois. Os motivos foram mudanças de cenário que não previram e falta de comprometimento interno, que deixou o plano engessado.</li>
+      <li>As ações adaptativas dependem dos <b>programas de controle</b>: sem controle, não há parâmetro para perceber o desvio.</li>
+    </ul>
+    <div class="macete"><b>Conclusão do artigo:</b> não existe uma taxonomia rígida, o que existe é um <b>contínuo</b>. As <b>deliberadas</b> combinam com o <b>médio e longo prazo</b> e com as estratégias <b>corporativas e de negócios</b>. As <b>emergentes</b> combinam com o <b>curto prazo</b> e com as estratégias de <b>produtos e mercados</b>. O ideal é <b>combinar as duas</b>: flexibilidade no curto prazo com consistência no longo. O objetivo é uma estratégia <b>suficiente</b>, não necessariamente a ótima.</div>
+  </section>
+
+  <section class="aula" id="pega">
+    <span class="tag">Revisão final</span>
+    <h2>⚠️ Pegadinhas que mais costumam cair em V ou F</h2>
+    <ul>
+      <li>Trocar <b>Posição (fora)</b> com <b>Perspectiva (dentro)</b> nos 5 Ps.</li>
+      <li>Inverter a fórmula do valor. O certo é <b>Benefício − Custo</b>.</li>
+      <li>Dizer que missão e visão vêm <b>antes</b> da análise de ambiente. Elas vêm <b>depois</b>.</li>
+      <li>Colocar <b>oportunidades e ameaças</b> como internas. Elas são <b>externas</b>.</li>
+      <li>Mudar a ordem <b>Escanear → Monitorar → Prever → Avaliar</b>.</li>
+      <li>Rivalidade forte com crescimento <b>rápido</b>. O certo é crescimento <b>lento</b>.</li>
+      <li>Substituto como produto do <b>mesmo setor</b>. Ele é de <b>fora</b> do setor.</li>
+      <li>Trocar <b>estrela</b> com <b>vaca leiteira</b>, ou inverter o ciclo entre as duas.</li>
+      <li>Trocar desenvolvimento de <b>produto</b> com desenvolvimento de <b>mercado</b> na Ansoff.</li>
+      <li>BSC "só financeiro" ou criado por Porter. Ele é de <b>Kaplan e Norton</b> e tem <b>4 perspectivas</b>.</li>
+      <li>Deliberada = <b>top-down + controle</b>. Emergente = <b>bottom-up + aprendizagem</b>.</li>
+      <li>"Existem estratégias puramente deliberadas ou puramente emergentes" é <b>FALSO</b>.</li>
+      <li>Planejada é a mais deliberada e <b>imposta</b> é a mais emergente.</li>
+      <li>No VRIO, o "insubstituível" não morreu: ele foi <b>absorvido pelo "imperfeitamente imitável"</b>.</li>
+    </ul>
+    <p style="text-align:center;margin:18px 0 14px"><button class="btn" onclick="go('quiz')">Bora pras questões →</button></p>
+  </section>
+</div>
+
+<!-- ===================== QUIZ ===================== -->
+<div class="view" id="v-quiz">
+  <div class="bar" id="filters"></div>
+  <div class="bar">
+    <button class="btn ghost" id="shuffle">🔀 Embaralhar</button>
+    <button class="btn ghost" id="wrongOnly">🔁 Refazer só as que errei</button>
+    <button class="btn ghost" id="reset">♻️ Zerar tudo</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="prog"><i id="progbar"></i></div>
+  <div id="qbox"></div>
+  <p class="small" style="margin-top:14px">Como funciona: marque <b>V</b> ou <b>F</b>. Se marcar <b>F</b>, escreva por que é falsa (do jeito que você faria na prova) e clique em conferir. Depois compare com a justificativa do gabarito e diga se a sua bateu.</p>
+</div>
+</main>
+
+<script>
+const AULAS = {2:"O que é estratégia",3:"Vant. competitiva / SWOT / Missão",4:"Ambiente externo / 5 forças",5:"RBV / VRIO",6:"Ferramentas",8:"Deliberada × Emergente",9:"Artigo"};
+const Q = [
+// ---- Aula 2
+[2,true,"O estudo da estratégia tem origem nos estudos da guerra, e a palavra vem do grego stratēgia, que significa a arte do general.","Verdadeira. Essa é a origem que a aula apresenta: estratégia como ofício do general e dos comandantes."],
+[2,false,"A estratégia como forma de controlar forças de mercado e moldar o ambiente competitivo já era predominante nos estudos de negócios desde o século XIX.","No século XIX ela só começou de forma tímida. A estratégia se tornou predominante nos estudos de negócios apenas na segunda metade do século XX."],
+[2,false,"Segundo Sun Tzu, quem conhece bem a si mesmo, mesmo sem conhecer o inimigo, não precisa temer o resultado de 100 batalhas.","Para Sun Tzu é preciso conhecer a si mesmo E o inimigo. Quem conhece só a si mesmo sofre uma derrota para cada vitória."],
+[2,true,"Comparando guerra e empresa, o nível político da guerra corresponde ao estratégico na empresa, o estratégico corresponde ao tático e o tático corresponde ao operacional.","Verdadeira. É exatamente a correspondência mostrada no slide 'A Estratégia em 2 Cenários'."],
+[2,false,"Como os recursos das organizações costumam ser abundantes, a estratégia se preocupa mais em definir objetivos do que em mobilizar recursos.","Os recursos costumam ser LIMITADOS. A estratégia mobiliza esses recursos limitados da forma mais eficiente possível para atingir os objetivos. Esse é o coração de uma estratégia de sucesso (exemplo da Suíça)."],
+[2,false,"Mintzberg et al. (2010) apresentam uma definição única e objetiva de estratégia: estratégia é um plano.","Mintzberg não dá uma definição única. Ele apresenta cinco formas de ver a estratégia, os 5 Ps: Plano, Padrão, Posição, Perspectiva e Ploy (truque)."],
+[2,true,"A estratégia como padrão é o comportamento consistente que a empresa adota ao longo do tempo, que pode se formar inclusive pelas respostas a eventos fora do planejamento.","Verdadeira. Os imprevistos acontecem, e a forma como a empresa responde a eles ao longo do tempo também forma um padrão."],
+[2,false,"Estratégia como posição significa olhar principalmente para dentro da empresa, para sua grande visão sobre as próprias capacidades, como uma 'teoria' da organização.","Isso é estratégia como PERSPECTIVA. Estratégia como POSIÇÃO olha para FORA: para o mercado e o ponto onde o produto encontra o cliente (qual produto colocar em qual mercado)."],
+[2,true,"Estratégia como ploy (truque) envolve uma manobra específica, de curto prazo, para superar o adversário, como quando a Coca-Cola sacrificou um produto apenas para prejudicar a Pepsi.","Verdadeira. Ploy é o truque, a manobra pontual de curto prazo para deixar o rival no chão."],
+[2,false,"Segundo Chaffee (1985), a essência da estratégia é estruturada, programada e rotineira, já que as organizações repetem as mesmas decisões.","Para Chaffee, a essência da estratégia é COMPLEXA: não estruturada, não programada, não rotineira e não repetitiva, porque as mudanças do ambiente trazem combinações novas de circunstâncias."],
+[2,true,"Para Chaffee, as estratégias envolvem questões de conteúdo (as ações decididas) e de processo (como essas ações são decididas e implementadas).","Verdadeira. O estudo da estratégia inclui o conteúdo e também o processo."],
+[2,true,"Estratégias pretendidas, emergentes e realizadas podem ser diferentes entre si, porque as estratégias não são puramente deliberadas.","Verdadeira. Essa é uma das concordâncias de Chaffee. O exemplo é o Slack, que virou um negócio bilionário 'por acidente'."],
+[2,false,"Uma empresa possui sempre uma única estratégia, aplicada igualmente a todas as suas áreas de negócio e produtos.","As estratégias existem em níveis diferentes: há a estratégia corporativa (a empresa como um todo) e estratégias particulares para cada área de negócio ou produto."],
+[2,true,"Para Wright et al. (1992), estratégia pode ser entendida como os planos desenvolvidos pela alta gerência para atingir resultados coerentes com a missão e os objetivos da organização.","Verdadeira. É a definição genérica que aparece no slide."],
+[2,true,"A estratégia diz respeito tanto à organização quanto ao ambiente: a organização usa a estratégia para lidar com as mudanças ambientais.","Verdadeira. Essa é a primeira concordância geral de Chaffee (1985)."],
+// ---- Aula 3
+[3,true,"Para Hitt et al., estratégia é um conjunto integrado e coordenado de compromissos e ações para explorar competências essenciais e obter vantagem competitiva.","Verdadeira. É a definição de Hitt et al. usada na Aula 3."],
+[3,false,"Na lógica de criação de valor, Valor = Custo percebido − Benefícios percebidos.","A fórmula está invertida. O certo é Valor = Benefícios percebidos − Custo percebido."],
+[3,true,"Existe vantagem competitiva quando a empresa implementa uma estratégia de criação de valor que os concorrentes não conseguem imitar ou que seria cara demais para imitar.","Verdadeira. É a definição de vantagem competitiva da aula."],
+[3,true,"Só se tem certeza de que uma estratégia gerou vantagem competitiva sustentável quando os esforços dos concorrentes para copiá-la pararam ou fracassaram.","Verdadeira. Exatamente como está no slide."],
+[3,false,"A duração de uma vantagem competitiva é determinada principalmente pelo tamanho e pelo faturamento da empresa que a possui.","Quem determina quanto a vantagem vai durar é a VELOCIDADE com que os concorrentes conseguem copiar a estratégia de criação de valor (exemplo: BlackBerry → Apple → Google)."],
+[3,true,"Organizações sem vantagem competitiva obtêm, no máximo, retornos médios.","Verdadeira. Retornos acima da média, ou seja, acima de outros investimentos de risco parecido, dependem de vantagem competitiva."],
+[3,false,"O primeiro passo da administração estratégica é definir a missão e a visão da empresa; só depois ela analisa os ambientes interno e externo.","É o contrário. O primeiro passo é ANALISAR O AMBIENTE (externo e interno). Missão e visão nascem dessa análise."],
+[3,true,"Na análise SWOT, forças e fraquezas têm origem interna, e oportunidades e ameaças têm origem externa.","Verdadeira. S e W são atributos da organização. O e T são atributos do ambiente."],
+[3,false,"Na SWOT, as oportunidades são as características reais e positivas da própria organização que ajudam a alcançar os objetivos.","Isso é a definição de FORÇAS (Strengths). Oportunidades são possibilidades positivas do CENÁRIO EXTERNO, que podem não acontecer."],
+[3,true,"A missão deve ser escrita em uma única frase concisa, expressar o papel que a empresa quer exercer no mundo e ser relevante para todos os stakeholders.","Verdadeira. A missão é o motivo central do planejamento: inspiradora, concisa e relevante para as partes interessadas."],
+[3,true,"A visão reflete o futuro ideal pretendido e tende a um horizonte de longo prazo, enquanto a missão pode mudar em razão das condições ambientais.","Verdadeira. Essa comparação aparece no slide."],
+[3,false,"Visão e valores são a mesma coisa: ambos representam as diretrizes que traduzem aquilo em que a empresa acredita.","Valores são as diretrizes que traduzem aquilo em que a empresa acredita. A VISÃO é o futuro ideal pretendido, de longo prazo. São conceitos diferentes."],
+[3,false,"Questões como treinamento dos funcionários, rotatividade e motivação são analisadas nos aspectos financeiros do ambiente interno.","Esses itens fazem parte dos ASPECTOS DE PESSOAL. Os aspectos financeiros tratam de como estão as finanças, se há dinheiro para investir e se há prejuízos recorrentes."],
+[3,true,"Concorrentes, fornecedores, consumidores, produtos substitutos e órgãos reguladores fazem parte do microambiente da organização.","Verdadeira. Já as forças político-legais, econômicas, tecnológicas e socioculturais formam o macroambiente."],
+// ---- Aula 4
+[4,false,"Como a organização controla sua estratégia, ela também consegue controlar a maior parte dos elementos do ambiente externo.","Nenhuma organização controla tudo. Ela controla a estratégia, as habilidades e o posicionamento, mas muitos elementos do ambiente externo fogem do controle dela."],
+[4,true,"A grande característica do ambiente geral é que as organizações normalmente não podem controlar diretamente os seus segmentos.","Verdadeira. As mudanças ali acontecem em escala muito maior e fora da zona de influência da empresa. Ela só consegue reconhecer as tendências e responder a elas."],
+[4,false,"Os quatro passos da análise do ambiente geral, em ordem, são: monitoramento, escaneamento, avaliação e previsão.","A ordem certa é: 1) Escaneamento, 2) Monitoramento, 3) Previsão e 4) Avaliação."],
+[4,true,"O escaneamento busca identificar os primeiros sinais de mudanças e tendências, e a previsão faz projeções com base nas tendências monitoradas.","Verdadeira. Os dois conceitos estão corretos."],
+[4,false,"A avaliação, na análise do ambiente geral, consiste em identificar os primeiros sinais de mudanças por meio da coleta de informações em diferentes fontes.","Isso é o ESCANEAMENTO. A avaliação determina o MOMENTO e a IMPORTÂNCIA das mudanças para as estratégias da empresa."],
+[4,false,"Taxas de juros, inflação e PIB são elementos do segmento demográfico do ambiente geral.","Esses elementos são do segmento ECONÔMICO. O demográfico trata do tamanho da população, estrutura etária, distribuição geográfica, miscigenação e distribuição de renda."],
+[4,true,"Legislação antitruste e legislação tributária são elementos do segmento político-jurídico.","Verdadeira."],
+[4,true,"A presença de mulheres no mercado de trabalho e a diversidade da mão de obra são elementos do segmento sociocultural.","Verdadeira."],
+[4,true,"A análise PESTAL considera os fatores Político, Econômico, Social, Tecnológico, Ambiental e Legal.","Verdadeira. Em inglês, a sigla é PESTEL."],
+[4,true,"Um setor é um grupo de empresas que fabricam produtos substitutos próximos e que, por isso, influenciam diretamente umas às outras.","Verdadeira. É a definição de setor da aula."],
+[4,false,"A rivalidade entre concorrentes tende a ser mais intensa quando o setor cresce rapidamente e há alta diferenciação entre os produtos.","É o contrário. A rivalidade é intensa quando o crescimento é LENTO e há BAIXA diferenciação (ou baixo custo de mudança), além de muitas empresas, grandes interesses estratégicos e fortes barreiras à saída."],
+[4,true,"A probabilidade de novas empresas entrarem em um setor depende de dois fatores: barreiras à entrada e retaliação esperada.","Verdadeira."],
+[4,false,"Espera-se uma retaliação fraca contra novos entrantes quando as empresas existentes têm recursos consideráveis e o crescimento do setor é lento.","Nessas condições espera-se retaliação FORTE: quando as empresas existentes têm interesse no setor, têm muitos recursos e o crescimento é lento ou restrito."],
+[4,false,"O poder de negociação dos fornecedores é maior quando existem muitos fornecedores e muitos substitutos para o produto que eles fornecem.","É o contrário. Os fornecedores têm mais poder quando são POUCOS (ou monopolistas), quando NÃO há substitutos satisfatórios, quando o volume que a empresa compra é inexpressivo e quando o recurso é estratégico."],
+[4,true,"Os compradores têm mais poder quando um único comprador responde por grande volume das vendas, quando o custo de trocar de produto é baixo e quando o produto é uma commodity.","Verdadeira. Exemplo da aula: a Nike dita as regras da sua cadeia de suprimento."],
+[4,false,"Produtos substitutos são os produtos dos concorrentes diretos que atuam dentro do mesmo setor.","Substitutos são bens ou serviços EXTERNOS ao setor que têm funções iguais ou semelhantes. Os concorrentes do mesmo setor entram na força 'rivalidade'."],
+[4,true,"Diferenciar o produto em dimensões que os clientes valorizam, como qualidade, serviço pós-venda e localização, reduz a atratividade de um substituto.","Verdadeira."],
+[4,false,"As cinco forças de Porter são: rivalidade entre concorrentes, ameaça de novos entrantes, ameaça de substitutos, poder dos fornecedores e poder do governo.","A quinta força é o PODER DE NEGOCIAÇÃO DOS COMPRADORES, não o governo."],
+[4,true,"Um novo entrante é uma ameaça porque, sem alteração na demanda, ele aumenta a oferta e a concorrência e reduz a receita das empresas existentes.","Verdadeira."],
+// ---- Aula 5
+[5,true,"A Visão Baseada em Recursos (RBV) considera que competências, capacidades e habilidades são a fonte mais importante da vantagem competitiva das empresas.","Verdadeira."],
+[5,false,"Para a RBV, os recursos estão distribuídos de forma semelhante entre as empresas, e as diferenças entre elas mudam rapidamente ao longo do tempo.","A RBV parte da ASSIMETRIA de recursos: as empresas têm recursos DIFERENTES, e essas diferenças são RELATIVAMENTE ESTÁVEIS ao longo do tempo."],
+[5,true,"Para Barney (1991), a vantagem competitiva ocorre quando a empresa implementa uma estratégia de criação de valor que não está sendo usada ao mesmo tempo por nenhum competidor atual ou potencial.","Verdadeira. É a definição de Barney citada na aula."],
+[5,false,"Capabilities são recursos facilmente transferíveis entre empresas, como dinheiro e maquinário.","Capabilities são um tipo especial de recurso: INTRÍNSECAS à organização, NÃO TRANSFERÍVEIS e específicas da empresa. Elas servem para aumentar a produtividade dos outros recursos."],
+[5,false,"Cultura organizacional, reputação e relacionamento com fornecedores são exemplos de recursos tangíveis.","Esses são recursos INTANGÍVEIS, que fazem parte da rotina e das práticas da organização. Tangíveis são os bens físicos, como imóveis, maquinário, inventário e dinheiro."],
+[5,true,"Segundo a RBV, a vantagem competitiva é construída por ganhos de eficiência (fazer mais com menos) ou de eficácia (atingir um novo objetivo desejado).","Verdadeira."],
+[5,false,"Para a RBV, todos os recursos de uma empresa são estratégicos e capazes de gerar vantagem competitiva.","Nem todos os recursos são estratégicos. O primeiro passo é identificar quais são os recursos-chave, que precisam passar pelos critérios VRIO."],
+[5,true,"O modelo VRIO avalia se o recurso é Valioso, Raro, Imperfeitamente imitável e se é explorado pela Organização.","Verdadeira."],
+[5,false,"Ao passar do VRIN para o VRIO, Barney descartou o critério 'insubstituível' porque ele deixou de ser relevante.","O critério 'insubstituível' CONTINUA RELEVANTE. Ele foi incorporado ao 'imperfeitamente imitável' (a substituição não pode atingir os mesmos efeitos), e entrou a dimensão Organização."],
+[5,true,"Um recurso excelente dentro de uma organização que não está apta a explorá-lo pode ficar apenas como vantagem potencial que nunca se materializa.","Verdadeira. Esse é o critério O (Organização). O exemplo é o turismo no RN: 32 mil turistas estrangeiros contra 3,5 milhões em Ibiza."],
+[5,false,"Na aula, a cultura da Toyota foi usada como exemplo de recurso raro, e o algoritmo da Netflix como exemplo de recurso insubstituível.","A cultura da Toyota foi o exemplo de recurso IMPERFEITAMENTE IMITÁVEL. O algoritmo da Netflix foi o exemplo de recurso VALIOSO. Raro: carisma e conexão com um público. Insubstituível: localização do Copacabana Palace."],
+[5,true,"A estratégia de uma organização também pode afetar o ambiente, e não apenas ser afetada por ele.","Verdadeira. A aula responde 'Sim' a essa pergunta, com o exemplo da Tesla no mercado de carros."],
+[5,true,"Depois de identificar os recursos-chave, a empresa deve protegê-los, desenvolvê-los e cuidar para que mantenham sua importância estratégica.","Verdadeira."],
+// ---- Aula 6
+[6,true,"Nas estratégias genéricas de Porter, os eixos são a vantagem estratégica (unicidade percebida pelo cliente × baixo custo) e o alvo estratégico (toda a indústria × único segmento).","Verdadeira."],
+[6,true,"A liderança em custo busca vencer com base no preço, com um produto igual ou indistinto da concorrência, competindo em toda a indústria.","Verdadeira. É típica de commodities e da aviação civil."],
+[6,false,"A estratégia de foco (ou nicho) significa competir abertamente com todos os concorrentes em toda a indústria.","Foco significa escolher APENAS UM SEGMENTO e concentrar as forças nele, em vez de competir com todos os concorrentes do mercado."],
+[6,true,"A diferenciação cria uma forte identidade para o produto, destacando vantagens como qualidade, serviço, prestígio, estilo ou praticidade.","Verdadeira."],
+[6,true,"A Matriz BCG foi criada pelo Boston Consulting Group para analisar o portfólio de produtos, usando como eixos o crescimento do mercado e a participação relativa de mercado.","Verdadeira."],
+[6,false,"Na Matriz BCG, a vaca leiteira é um produto com alta participação em um mercado de alto crescimento, que exige muito investimento para manter a posição.","Esse é o produto ESTRELA. A vaca leiteira tem alta participação em mercado de BAIXO crescimento (maduro), concorrência estável, pouca necessidade de investimento e margens altas."],
+[6,true,"A interrogação é um produto com baixa participação em um mercado de alto crescimento, que pode se recuperar e virar estrela.","Verdadeira."],
+[6,true,"O abacaxi é um produto com baixa participação em um mercado consolidado; normalmente dá pouco lucro e, idealmente, deve sair do portfólio.","Verdadeira."],
+[6,false,"Na Matriz BCG, conforme o mercado amadurece, a tendência é que as vacas leiteiras se tornem estrelas.","É o contrário. Quando o mercado amadurece e o crescimento cai, as ESTRELAS tendem a virar VACAS LEITEIRAS."],
+[6,false,"Na Matriz de Ansoff, lançar um produto novo em um mercado tradicional é chamado de desenvolvimento de mercado.","Produto novo em mercado tradicional é DESENVOLVIMENTO DE PRODUTO. Desenvolvimento de mercado é levar um produto tradicional para um mercado novo."],
+[6,true,"Na Matriz de Ansoff, explorar novos mercados com novos produtos corresponde à estratégia de diversificação.","Verdadeira."],
+[6,true,"A penetração de mercado consiste em crescer com um produto tradicional em um mercado tradicional, competindo com rivais experientes e crescendo em cima deles.","Verdadeira."],
+[6,true,"A Matriz de Ansoff foi criada em 1965 para classificar estratégias de crescimento de uma organização.","Verdadeira."],
+[6,false,"O Balanced Scorecard foi criado por Michael Porter nos anos 1980 e se concentra apenas em indicadores financeiros.","O BSC foi criado por KAPLAN E NORTON no início dos anos 1990. Ele COMPLEMENTA as métricas financeiras com as perspectivas de clientes, processos internos e aprendizado e crescimento."],
+[6,true,"A lógica do BSC é: se a organização aprende, melhora seus processos; com processos melhores, atende melhor os clientes; atendendo melhor os clientes, tende a melhorar o resultado financeiro.","Verdadeira."],
+[6,false,"No BSC, a perspectiva de processos internos avalia a satisfação, a retenção e o valor gerado para os clientes.","Isso é a perspectiva de CLIENTES. A de processos internos examina a eficiência e a eficácia dos processos operacionais principais."],
+[6,true,"O Balanced Scorecard é uma ferramenta para tirar a estratégia do papel, desdobrando-a em objetivos, indicadores (KPIs), metas e iniciativas.","Verdadeira."],
+[6,true,"Um bom KPI segue o critério SMART: Específico, Mensurável, Atingível, Relevante e Temporal.","Verdadeira."],
+[6,false,"'Aumentar as vendas da empresa' é um exemplo de KPI que atende ao critério SMART.","Não atende. Não é específico, não é mensurável (não tem número) e não é temporal (não tem prazo). Um exemplo correto seria 'aumentar a taxa de conversão de 8% para 12% até dezembro'."],
+[6,true,"Enquanto PESTAL e as 5 forças são ferramentas para analisar o ambiente externo e o mercado, o Balanced Scorecard é apresentado como ferramenta de olhar interno.","Verdadeira."],
+// ---- Aula 8
+[8,true,"Como nossa racionalidade é limitada, não conseguimos maximizar os resultados de um plano: não conhecemos todas as alternativas, nem todas as consequências, e não saberíamos avaliar qual é a melhor.","Verdadeira. Esse é o primeiro grande problema de qualquer plano."],
+[8,true,"Para Mintzberg (1985), as estratégias existem em um contínuo entre deliberadas e emergentes.","Verdadeira."],
+[8,false,"Estratégias puramente deliberadas, em que tudo é planejado e executado sem alterações, são comuns em empresas bem administradas.","Estratégias puramente deliberadas NÃO EXISTEM. Ninguém consegue prever o ambiente perfeitamente, e sempre serão necessários ajustes."],
+[8,false,"A estratégia deliberada é do tipo bottom-up, e sua questão principal é a aprendizagem organizacional.","A deliberada é TOP-DOWN (a alta gerência concebe e os outros executam) e sua questão principal é o CONTROLE ESTRATÉGICO. Bottom-up com foco em aprendizagem é a EMERGENTE."],
+[8,false,"Dizer que a estratégia emergente é bottom-up significa que o nível operacional é quem formula a estratégia da empresa.","Não significa isso. Ela emerge como um PADRÃO DE COMPORTAMENTO a partir do que funciona, e não porque o operacional formula a estratégia."],
+[8,true,"Para ser considerada estratégia emergente, e não sorte, é preciso haver um conjunto de ações consistentes ao longo do tempo, sem que sejam propositais.","Verdadeira."],
+[8,false,"Estratégias puramente emergentes, realizadas sem nenhum planejamento prévio, são o tipo mais frequente nas organizações.","Estratégias puramente emergentes também NÃO EXISTEM. Toda organização faz um mínimo de planejamento prévio, e é muito difícil excluir a intenção desse processo."],
+[8,true,"Quanto mais cuidadosa e precisa for a estratégia desenhada, mais a estratégia realizada se parecerá com a planejada.","Verdadeira."],
+[8,false,"Na tipologia de Mintzberg, a estratégia planejada é a mais emergente de todas.","A estratégia PLANEJADA é a MAIS DELIBERADA. A mais emergente é a IMPOSTA."],
+[8,true,"Na estratégia empreendedora, as intenções existem como a visão pessoal e não explicitada de um único líder, o que a torna adaptável a novas oportunidades.","Verdadeira. É relativamente deliberada, mas pode emergir."],
+[8,true,"Na estratégia ideológica, as intenções vêm de crenças compartilhadas, e o controle é normativo, por doutrinação e/ou socialização.","Verdadeira. É bastante deliberada, e a organização costuma ser proativa em relação ao ambiente."],
+[8,true,"Na estratégia guarda-chuva, a liderança define limites ou objetivos e os outros atores respondem às forças do ambiente dentro desses limites.","Verdadeira. É parcialmente deliberada, parcialmente emergente e deliberadamente emergente."],
+[8,false,"Na estratégia de processo, a liderança controla o conteúdo da estratégia e deixa os aspectos do processo a cargo de outros atores.","É o contrário. A liderança controla o PROCESSO (contratação, estrutura etc.) e deixa o CONTEÚDO a cargo dos outros atores."],
+[8,true,"Na estratégia desconectada, os padrões surgem em enclaves, ou seja, atores com vínculos frouxos com a organização, sem intenções centrais ou em contradição com elas.","Verdadeira."],
+[8,false,"A estratégia de consenso é bastante deliberada, porque depende de um acordo formal definido pela alta gerência.","A de consenso nasce do AJUSTAMENTO MÚTUO entre os atores, sem intenções centrais. Por isso é BASTANTE EMERGENTE."],
+[8,true,"Na estratégia imposta, o ambiente determina os padrões de ação; é a mais emergente, embora possa ser internalizada pela organização e se tornar deliberada.","Verdadeira."],
+[8,true,"Uma estratégia 100% deliberada significa aprendizagem zero, e uma 100% emergente significa controle zero.","Verdadeira. É a frase-chave do fechamento da aula."],
+[8,false,"Estratégias emergentes são sempre ruins e estratégias deliberadas são sempre boas.","Emergentes NÃO são necessariamente ruins e deliberadas NÃO são sempre boas. Elas funcionam em um contínuo."],
+// ---- Artigo
+[9,false,"Para Borges Jr. e Luce, o planejamento estratégico deve funcionar como um trilho, garantindo que a empresa não se desvie do caminho traçado.","Para os autores, o planejamento deve ser como uma ESTRADA LARGA (consistência), e NÃO como um trilho, que não permitiria flexibilidade no curto prazo."],
+[9,true,"No artigo, as estratégias deliberadas são associadas ao médio e longo prazo e às estratégias corporativas e de negócios, e as emergentes ao curto prazo e às estratégias de produtos ou mercados.","Verdadeira. É a ideia da Figura 1 do artigo."],
+[9,false,"No estudo com os 14 vencedores do Top de Marketing da ADVB/RS, quase nenhuma empresa tomou ações adaptativas ao longo do caminho.","Foi o contrário: 12 das 14 empresas tomaram ações adaptativas, que são o cerne das estratégias emergentes."],
+[9,true,"Segundo o artigo, as ações adaptativas dependem dos programas de controle: onde não há controle, não há parâmetro que indique o desvio.","Verdadeira."],
+[9,false,"No estudo, a maioria das empresas tinha programas formais e efetivos de controle da implementação da estratégia.","Apenas 1 das 14 empresas tinha um programa de controle formal e efetivo. Isso não quer dizer que as outras não acompanhavam os projetos, mas faziam isso de forma informal."],
+[9,true,"No estudo, 13 dos 14 casos atingiram os objetivos no curto prazo, mas 7 não conseguiram sustentar a estratégia depois.","Verdadeira. Os motivos foram mudanças de cenário não previstas e falta de comprometimento interno, que deixou o plano engessado."],
+[9,true,"Segundo o artigo, as estratégias emergentes são fruto muito mais da cultura organizacional e da learning organization do que dos planejamentos deliberados.","Verdadeira."],
+[9,false,"A conclusão do artigo é que a empresa deve escolher entre ser totalmente deliberada ou totalmente emergente.","O artigo defende um CONTÍNUO e a COMBINAÇÃO das duas: flexibilidade no curto prazo com consistência no longo prazo, em busca de uma estratégia suficiente, e não necessariamente a ótima."],
+[9,true,"Para o artigo, a estratégia emergente é aquela que surge da organização em resposta a uma oportunidade do ambiente, corrigindo a rota diante da dificuldade de prever mudanças.","Verdadeira."],
+[9,false,"Segundo o artigo, as estratégias deliberadas surgiram como algo flexível e informal, em oposição aos antigos orçamentos empresariais.","As deliberadas são a CONTINUAÇÃO dos antigos orçamentos e planejamentos, com o mesmo FORMALISMO e a mesma RIGIDEZ, feitos pela alta cúpula ou por consultorias."]
+].map((q,i)=>({id:i,a:q[0],v:q[1],t:q[2],j:q[3]}));
+
+// ---------- state ----------
+const KEY="admest_quiz_v1";
+let st={ans:{}}; // id -> {pick, text, ok}
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.ans)st=s}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+let filter=new Set(Object.keys(AULAS).map(Number));
+let order=[],pos=0;
+
+function build(onlyWrong){
+  order=Q.filter(q=>filter.has(q.a)&&(!onlyWrong||(st.ans[q.id]&&st.ans[q.id].ok===false))).map(q=>q.id);
+  pos=0;
+  if(!onlyWrong){const firstOpen=order.findIndex(id=>!st.ans[id]||st.ans[id].ok===undefined);pos=firstOpen<0?0:firstOpen}
+  render();
+}
+function shuffle(){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}pos=0;render()}
+
+function filters(){
+  const f=document.getElementById('filters');f.innerHTML='';
+  const all=document.createElement('button');all.className='chip'+(filter.size===Object.keys(AULAS).length?' on':'');all.textContent='Todas';
+  all.onclick=()=>{filter=new Set(Object.keys(AULAS).map(Number));filters();build()};f.appendChild(all);
+  for(const [k,n] of Object.entries(AULAS)){
+    const b=document.createElement('button');const on=filter.has(+k)&&filter.size!==Object.keys(AULAS).length;
+    b.className='chip'+(on?' on':'');b.textContent=(k==9?'Artigo':'Aula '+k)+' · '+n;
+    b.onclick=()=>{ if(filter.size===Object.keys(AULAS).length)filter=new Set([+k]); else if(filter.has(+k)){filter.delete(+k);if(!filter.size)filter=new Set(Object.keys(AULAS).map(Number))} else filter.add(+k); filters();build()};
+    f.appendChild(b);
+  }
+}
+function stats(){
+  const ids=Q.filter(q=>filter.has(q.a)).map(q=>q.id);
+  let done=0,ok=0;ids.forEach(id=>{const a=st.ans[id];if(a&&a.ok!==undefined){done++;if(a.ok)ok++}});
+  document.getElementById('stats').innerHTML=`<span>Respondidas: <b>${done}/${ids.length}</b></span><span>Acertos: <b>${ok}</b></span><span>Erros: <b>${done-ok}</b></span><span>Aproveitamento: <b>${done?Math.round(ok/done*100):0}%</b></span>`;
+  document.getElementById('progbar').style.width=(ids.length?done/ids.length*100:0)+'%';
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  stats();
+  const box=document.getElementById('qbox');
+  if(!order.length){box.innerHTML='<div class="end"><p>Nenhuma questão aqui. 🎉</p><button class="btn" onclick="build()">Voltar pra todas</button></div>';return}
+  if(pos>=order.length){return endScreen()}
+  const q=Q[order[pos]],a=st.ans[q.id]||{};
+  const lbl=q.a==9?'Artigo':'Aula '+q.a;
+  box.innerHTML=`<div class="q">
+    <div class="meta">Questão ${pos+1} de ${order.length} · ${lbl} — ${AULAS[q.a]}</div>
+    <div class="stmt">${esc(q.t)}</div>
+    <div class="vf"><button class="v" data-p="V">V · Verdadeiro</button><button class="f" data-p="F">F · Falso</button></div>
+    <div id="just"></div><div id="res"></div>
+  </div>
+  <div class="nav"><button class="btn ghost" id="prev" ${pos===0?'disabled':''}>← Anterior</button><button class="btn" id="next">${pos===order.length-1?'Finalizar':'Próxima →'}</button></div>`;
+  const bV=box.querySelector('.v'),bF=box.querySelector('.f');
+  document.getElementById('prev').onclick=()=>{pos--;render()};
+  document.getElementById('next').onclick=()=>{pos++;render();window.scrollTo({top:0,behavior:'smooth'})};
+  const lock=()=>{bV.disabled=bF.disabled=true};
+  if(a.pick){ (a.pick==='V'?bV:bF).classList.add('sel'); if(a.checked){lock();showRes(q,a)} else if(a.pick==='F') askJust(q,a); }
+  bV.onclick=()=>{bF.classList.remove('sel');bV.classList.add('sel');document.getElementById('just').innerHTML='';const r={pick:'V',checked:true};r.ok=q.v===true;st.ans[q.id]=r;save();lock();showRes(q,r);stats()};
+  bF.onclick=()=>{bV.classList.remove('sel');bF.classList.add('sel');const r={pick:'F',text:(st.ans[q.id]&&st.ans[q.id].text)||''};st.ans[q.id]=r;save();askJust(q,r)};
+}
+function askJust(q,a){
+  const j=document.getElementById('just');
+  j.innerHTML=`<label class="lbl">Por que é falsa? Escreva a sua justificativa:</label>
+  <textarea id="ta" placeholder="Ex.: É falsa porque...">${esc(a.text||'')}</textarea>
+  <div style="margin-top:10px"><button class="btn" id="chk">Conferir</button></div>`;
+  const ta=document.getElementById('ta');ta.oninput=()=>{a.text=ta.value;save()};ta.focus();
+  document.getElementById('chk').onclick=()=>{
+    a.text=ta.value.trim();a.checked=true;
+    if(q.v===true){a.ok=false}
+    st.ans[q.id]=a;save();
+    document.querySelectorAll('.vf button').forEach(b=>b.disabled=true);
+    j.innerHTML='';showRes(q,a);stats();
+  };
+}
+function showRes(q,a){
+  const r=document.getElementById('res');
+  const pickedRight=(a.pick==='V')===q.v;
+  const you=a.text?`<div class="you"><b>Sua justificativa:</b> ${esc(a.text)}</div>`:'';
+  if(!pickedRight){
+    r.innerHTML=`<div class="res bad"><h4>❌ Errou. A afirmativa é ${q.v?'VERDADEIRA':'FALSA'}.</h4>${you}<div><b>${q.v?'Por que é verdadeira':'Justificativa do gabarito'}:</b> ${esc(q.j)}</div></div>`;
+    return;
+  }
+  if(q.v){r.innerHTML=`<div class="res ok"><h4>✅ Acertou! É verdadeira.</h4><div>${esc(q.j)}</div></div>`;return}
+  // falsa, marcou F: autoavaliação da justificativa
+  const selfBtns=a.ok===undefined?`<div class="self"><span style="font-weight:600;align-self:center">A sua justificativa bateu com a do gabarito?</span><button class="btn" id="sOk">👍 Sim</button><button class="btn ghost" id="sNo">👎 Faltou ou errei</button></div>`:
+    `<div class="small" style="margin-top:8px">Você marcou: ${a.ok?'👍 justificativa certa':'👎 justificativa incompleta (conta como erro, pra você revisar)'}</div>`;
+  r.innerHTML=`<div class="res ${a.ok===false?'bad':'ok'}"><h4>✅ Isso, é falsa!</h4>${you}<div><b>Justificativa do gabarito:</b> ${esc(q.j)}</div>${selfBtns}</div>`;
+  if(a.ok===undefined){
+    document.getElementById('sOk').onclick=()=>{a.ok=true;save();showRes(q,a);stats()};
+    document.getElementById('sNo').onclick=()=>{a.ok=false;save();showRes(q,a);stats()};
+  }
+}
+function endScreen(){
+  const ids=order;let ok=0,done=0;const per={};
+  ids.forEach(id=>{const q=Q[id],a=st.ans[id];per[q.a]=per[q.a]||{ok:0,n:0};per[q.a].n++;if(a&&a.ok!==undefined){done++;if(a.ok){ok++;per[q.a].ok++}}});
+  const rows=Object.entries(per).map(([k,v])=>`<tr><td>${k==9?'Artigo':'Aula '+k} · ${AULAS[k]}</td><td>${v.ok}/${v.n}</td><td>${Math.round(v.ok/v.n*100)}%</td></tr>`).join('');
+  const pct=ids.length?Math.round(ok/ids.length*100):0;
+  document.getElementById('qbox').innerHTML=`<div class="end"><div class="small">Resultado</div><div class="big">${pct}%</div><p>${ok} acertos em ${ids.length} questões${done<ids.length?` (${ids.length-done} ficaram sem resposta)`:''}.</p>
+  <table>${rows}</table>
+  <p>${pct>=80?'Mandou bem! Revise só as que errou.':pct>=60?'Tá no caminho. Volte no resumo das aulas com menor %.':'Volte no resumo das aulas com menor % e refaça as que errou.'}</p>
+  <div class="bar" style="justify-content:center"><button class="btn" onclick="build(true)">🔁 Refazer as que errei</button><button class="btn ghost" onclick="go('resumo')">📘 Voltar ao resumo</button></div></div>`;
+}
+
+// ---------- tabs ----------
+function go(v){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));window.scrollTo(0,0)}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>go(t.dataset.v));
+document.getElementById('shuffle').onclick=()=>{build();shuffle()};
+document.getElementById('wrongOnly').onclick=()=>build(true);
+let resetArm=false;
+document.getElementById('reset').onclick=e=>{
+  if(!resetArm){resetArm=true;e.target.textContent='Clique de novo pra confirmar';setTimeout(()=>{resetArm=false;e.target.textContent='♻️ Zerar tudo'},3000);return}
+  st={ans:{}};save();resetArm=false;e.target.textContent='♻️ Zerar tudo';build();
+};
+filters();build();
+</script>
+</body>
+</html>
